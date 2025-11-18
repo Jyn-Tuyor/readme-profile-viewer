@@ -1,34 +1,9 @@
 <template>
-  <div class="px-12 py-8 flex gap-8">
-    <label class="input">
-      <svg
-        class="h-[1em] opacity-50"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-      >
-        <g
-          stroke-linejoin="round"
-          stroke-linecap="round"
-          stroke-width="2.5"
-          fill="none"
-          stroke="currentColor"
-        >
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </g>
-      </svg>
-      <input type="text" v-model="search_val" required placeholder="Username" />
-    </label>
-    <button @click="getUser" class="btn">Search</button>
-  </div>
+  <navbar></navbar>
 
-  <main class="p-8">
-    <div class="readme-container p-2 shadow-2xl bg-black/50">
-      <div class="flex flex-col justify-center items-center">
-        <div v-html="rendered"></div>
-      </div>
-    </div>
-  </main>
+  <search-bar v-model="search_val" :getUser="getUser"></search-bar>
+
+  <render-markup :rendered="rendered"></render-markup>
 </template>
 
 <style scoped>
@@ -43,9 +18,17 @@
 // import { Octokit } from 'octokit';
 import { Octokit } from "@octokit/rest";
 import { marked } from "marked";
+import Navbar from "@/components/Navbar.vue";
+import RenderMarkup from "@/components/RenderMarkup.vue";
+import SearchBar from "@/components/SearchBar.vue";
 
 export default {
   name: "App",
+  components: {
+    Navbar,
+    RenderMarkup,
+    SearchBar,
+  },
   data() {
     return {
       octokit: new Octokit({
@@ -112,6 +95,7 @@ export default {
         }
       } catch (error) {
         console.error(error);
+        this.readme = null;
       }
     },
   },
